@@ -1,0 +1,64 @@
+[project]
+name = "llm120"
+version = "0.1.0"
+description = "A reproducible single-GPU pipeline for pretraining a 125M parameter language model from scratch"
+readme = "README.md"
+requires-python = ">=3.11,<3.13"
+dependencies = [
+  "huggingface-hub>=0.34,<2",
+  "numpy>=2.0,<3",
+  "pyarrow>=20,<24",
+  "pyyaml>=6.0,<7",
+  "safetensors>=0.5,<1",
+  "tensorboard>=2.19,<3",
+  "tokenizers>=0.21,<1",
+  "torch>=2.7,<3",
+  "transformers>=4.53,<6",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8.3,<10", "ruff>=0.12,<1"]
+posttrain = [
+  "accelerate>=1.10,<2",
+  "datasets>=4.0,<5",
+  "trl>=1.6,<2",
+]
+
+[project.scripts]
+llm120-download = "llm120.download:main"
+llm120-tokenizer = "llm120.tokenizer_train:main"
+llm120-prepare = "llm120.prepare:main"
+llm120-train = "llm120.train:main"
+llm120-generate = "llm120.generate:main"
+llm120-benchmark = "llm120.benchmark:main"
+llm120-doctor = "llm120.doctor:main"
+llm120-download-posttrain = "llm120.posttrain_download:main"
+llm120-prepare-posttrain = "llm120.posttrain_prepare:main"
+llm120-sft = "llm120.sft:main"
+llm120-dpo = "llm120.dpo:main"
+llm120-reward = "llm120.reward:main"
+llm120-rlhf = "llm120.rlhf:main"
+llm120-chat = "llm120.chat:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/llm120"]
+
+[[tool.uv.index]]
+name = "pytorch-cu128"
+url = "https://download.pytorch.org/whl/cu128"
+explicit = true
+
+[tool.uv.sources]
+torch = { index = "pytorch-cu128" }
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+extend-exclude = ["data", "artifacts", "checkpoints"]

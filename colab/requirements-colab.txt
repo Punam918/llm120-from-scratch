@@ -1,0 +1,11 @@
+# Runtime dependencies for LLM120 on Google Colab.
+# PyTorch is NOT listed here: Colab ships its own CUDA-enabled torch, and we
+# deliberately avoid the repo's cu128 index (that index is for the author's
+# Blackwell RTX 5050, sm_120 — wrong for Colab's T4, sm_75).
+transformers>=4.53,<6
+tokenizers>=0.21
+huggingface-hub>=0.34
+pyarrow>=20
+safetensors>=0.5
+tensorboard>=2.19
+pyyaml>=6.0

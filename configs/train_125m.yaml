@@ -1,0 +1,48 @@
+project:
+  name: llm120-english
+  output_dir: checkpoints/llm120-english
+  seed: 42
+
+paths:
+  tokenizer: artifacts/tokenizer-32k
+  train_manifest: data/tokenized/train-manifest.json
+  validation_manifest: data/tokenized/validation-manifest.json
+
+model:
+  # 125,077,824 parameters with a 32,768-token tied embedding.
+  hidden_size: 576
+  intermediate_size: 1536
+  num_hidden_layers: 30
+  num_attention_heads: 9
+  num_key_value_heads: 3
+  max_position_embeddings: 2048
+  rope_theta: 10000.0
+  rms_norm_eps: 1.0e-5
+  initializer_range: 0.041666666666666664
+  tie_word_embeddings: true
+
+training:
+  sequence_length: 2048
+  micro_batch_size: 4
+  gradient_accumulation_steps: 8
+  # 10B tokens / (2048 * 4 * 8) = 152,588 optimizer steps.
+  max_tokens: 10000000000
+  learning_rate: 0.003
+  warmup_steps: 2000
+  decay_ratio: 0.20
+  min_learning_rate_ratio: 0.0
+  adam_beta1: 0.9
+  adam_beta2: 0.95
+  adam_epsilon: 1.0e-8
+  weight_decay: 0.01
+  max_grad_norm: 1.0
+  precision: bf16
+  gradient_checkpointing: true
+  torch_compile: false
+  allow_tf32: true
+  fused_optimizer: true
+  log_every_steps: 10
+  eval_every_steps: 500
+  eval_batches: 32
+  save_every_steps: 1000
+  keep_last_checkpoints: 3
